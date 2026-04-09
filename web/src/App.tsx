@@ -1,5 +1,14 @@
 import { useEffect, useMemo, useState } from "react";
-import { defaultBalanceState, formatYen, loadBalanceState, saveBalanceState, type BalanceState } from "./storage";
+import {
+  createHistoryItem,
+  defaultBalanceState,
+  formatDateTime,
+  formatYen,
+  loadBalanceState,
+  pushHistory,
+  saveBalanceState,
+  type BalanceState
+} from "./storage";
 
 const keypadRows = [
   ["1", "2", "3"],
@@ -12,6 +21,7 @@ function App() {
   const [state, setState] = useState<BalanceState>(defaultBalanceState);
   const [input, setInput] = useState("");
   const [isStandalone, setIsStandalone] = useState(false);
+  const [historyOpen, setHistoryOpen] = useState(false);
 
   useEffect(() => {
     setState(loadBalanceState());
@@ -48,27 +58,31 @@ function App() {
 
   const applySubtract = () => {
     if (!canCommit) return;
-    setState((current) => ({
-      balance: current.balance - parsedAmount,
-      lastAction: {
-        kind: "subtract",
-        amount: parsedAmount,
-        at: new Date().toISOString()
-      }
-    }));
+    setState((current) => {
+      const nextBalance = current.balance - parsedAmount;
+      const item = createHistoryItem("subtract", parsedAmount, nextBalance);
+
+      return {
+        balance: nextBalance,
+        lastAction: item,
+        history: pushHistory(current.history, item)
+      };
+    });
     clearInput();
   };
 
   const applyAdd = () => {
     if (!canCommit) return;
-    setState((current) => ({
-      balance: current.balance + parsedAmount,
-      lastAction: {
-        kind: "add",
-        amount: parsedAmount,
-        at: new Date().toISOString()
-      }
-    }));
+    setState((current) => {
+      const nextBalance = current.balance + parsedAmount;
+      const item = createHistoryItem("add", parsedAmount, nextBalance);
+
+      return {
+        balance: nextBalance,
+        lastAction: item,
+        history: pushHistory(current.history, item)
+      };
+    });
     clearInput();
   };
 
@@ -83,7 +97,8 @@ function App() {
 
       return {
         balance: nextBalance,
-        lastAction: null
+        lastAction: null,
+        history: current.history
       };
     });
   };
@@ -100,15 +115,29 @@ function App() {
       <div className="ambient ambient-left" />
       <div className="ambient ambient-right" />
 
+      {historyOpen ? (
+        <button
+          aria-label="履歴を閉じる"
+          className="sheet-backdrop"
+          onClick={() => setHistoryOpen(false)}
+          type="button"
+        />
+      ) : null}
+
       <section className="device-frame">
         <header className="topbar">
           <div>
             <p className="eyebrow">Balance Note</p>
             <h1>残高メモ</h1>
           </div>
-          <button className="ghost-button" onClick={resetBalance} type="button">
-            リセット
-          </button>
+          <div className="topbar-actions">
+            <button className="ghost-button" onClick={() => setHistoryOpen(true)} type="button">
+              履歴
+            </button>
+            <button className="ghost-button" onClick={resetBalance} type="button">
+              リセット
+            </button>
+          </div>
         </header>
 
         {!isStandalone ? (
@@ -177,6 +206,73 @@ function App() {
             );
           })}
         </section>
+      </section>
+
+      <section
+        aria-hidden={!historyOpen}
+        aria-label="操作履歴"
+        className={`history-sheet${historyOpen ? " is-open" : ""}`}
+      >
+        <div className="history-sheet-grabber" />
+
+        <div className="history-sheet-header">
+          <div>
+            <p className="section-label">操作履歴</p>
+            <h2 className="history-title">最近の記録</h2>
+          </div>
+          <button className="ghost-button" onClick={() => setHistoryOpen(false)} type="button">
+            閉じる
+          </button>
+        </div>
+
+        <div className="history-sheet-toolbar">
+          <p className="history-summary">
+            {state.history.length > 0 ? `${state.history.length}件保存中` : "履歴はまだありません"}
+          </p>
+          <button
+            className="subtle-button"
+            disabled={state.history.length === 0}
+            onClick={() => {
+              const accepted = window.confirm("履歴をすべて削除します。残高は維持されます。");
+              if (!accepted) return;
+              setState((current) => ({
+                ...current,
+                lastAction: null,
+                history: []
+              }));
+            }}
+            type="button"
+          >
+            履歴を全消去
+          </button>
+        </div>
+
+        <div className="history-list">
+          {state.history.length === 0 ? (
+            <div className="history-empty">
+              <p className="history-empty-title">まだ履歴がありません</p>
+              <p className="history-empty-copy">加算や支出を記録すると、ここに時系列で残ります。</p>
+            </div>
+          ) : (
+            state.history.map((item) => (
+              <article className="history-item" key={item.id}>
+                <div className="history-item-row">
+                  <span className={`history-badge ${item.kind === "subtract" ? "is-spend" : "is-add"}`}>
+                    {item.kind === "subtract" ? "支出" : "加算"}
+                  </span>
+                  <time className="history-time" dateTime={item.at}>
+                    {formatDateTime(item.at)}
+                  </time>
+                </div>
+
+                <div className="history-item-row history-main-row">
+                  <strong className="history-amount">{formatYen(item.amount)}</strong>
+                  <span className="history-balance">残高 {formatYen(item.balanceAfter)}</span>
+                </div>
+              </article>
+            ))
+          )}
+        </div>
       </section>
     </main>
   );
