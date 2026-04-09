@@ -40,11 +40,12 @@ button {
 .sheet-backdrop {
   position: fixed;
   inset: 0;
-  z-index: 9;
+  z-index: 11;
   border: 0;
   background: rgba(15, 23, 42, 0.2);
   backdrop-filter: blur(4px);
   -webkit-backdrop-filter: blur(4px);
+  touch-action: none;
 }
 
 .app-shell {
@@ -90,6 +91,10 @@ button {
   display: grid;
   align-content: stretch;
   gap: 10px;
+}
+
+.app-shell.history-mode .device-frame {
+  pointer-events: none;
 }
 
 .topbar {
@@ -280,7 +285,7 @@ button {
   left: 0;
   right: 0;
   bottom: 0;
-  z-index: 10;
+  z-index: 12;
   display: grid;
   gap: 12px;
   max-width: 38rem;
@@ -297,10 +302,14 @@ button {
   transition: transform 180ms ease;
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
+  pointer-events: none;
+  touch-action: none;
 }
 
 .history-sheet.is-open {
   transform: translateY(0);
+  pointer-events: auto;
+  touch-action: pan-y;
 }
 
 .history-sheet-grabber {
@@ -330,7 +339,8 @@ button {
 .history-summary,
 .history-empty-copy,
 .history-time,
-.history-balance {
+.history-balance,
+.history-delete-hint {
   margin: 0;
   color: #667085;
   font-size: 0.86rem;
@@ -341,6 +351,9 @@ button {
   gap: 10px;
   overflow: auto;
   padding-bottom: 2px;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-y;
 }
 
 .history-item,
@@ -351,8 +364,20 @@ button {
   border: 1px solid rgba(255, 255, 255, 0.7);
 }
 
+.history-item {
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+}
+
 .history-main-row {
   margin-top: 8px;
+}
+
+.history-item-meta {
+  display: grid;
+  justify-items: end;
+  gap: 4px;
 }
 
 .history-badge {
@@ -379,6 +404,10 @@ button {
 .history-amount {
   font-size: 1.12rem;
   letter-spacing: -0.03em;
+}
+
+.history-delete-hint {
+  font-size: 0.75rem;
 }
 
 @media (min-width: 720px) {

@@ -110,8 +110,19 @@ function App() {
     clearInput();
   };
 
+  const deleteHistoryItem = (id: string) => {
+    const accepted = window.confirm("この履歴を削除します。残高は変更しません。");
+    if (!accepted) return;
+
+    setState((current) => ({
+      ...current,
+      lastAction: current.lastAction?.id === id ? null : current.lastAction,
+      history: current.history.filter((item) => item.id !== id)
+    }));
+  };
+
   return (
-    <main className="app-shell">
+    <main className={`app-shell${historyOpen ? " history-mode" : ""}`}>
       <div className="ambient ambient-left" />
       <div className="ambient ambient-right" />
 
@@ -255,7 +266,12 @@ function App() {
             </div>
           ) : (
             state.history.map((item) => (
-              <article className="history-item" key={item.id}>
+              <button
+                className="history-item"
+                key={item.id}
+                onClick={() => deleteHistoryItem(item.id)}
+                type="button"
+              >
                 <div className="history-item-row">
                   <span className={`history-badge ${item.kind === "subtract" ? "is-spend" : "is-add"}`}>
                     {item.kind === "subtract" ? "支出" : "加算"}
@@ -267,9 +283,12 @@ function App() {
 
                 <div className="history-item-row history-main-row">
                   <strong className="history-amount">{formatYen(item.amount)}</strong>
-                  <span className="history-balance">残高 {formatYen(item.balanceAfter)}</span>
+                  <div className="history-item-meta">
+                    <span className="history-balance">残高 {formatYen(item.balanceAfter)}</span>
+                    <span className="history-delete-hint">タップで削除</span>
+                  </div>
                 </div>
-              </article>
+              </button>
             ))
           )}
         </div>
