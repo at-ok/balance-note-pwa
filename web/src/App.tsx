@@ -32,6 +32,25 @@ function App() {
     saveBalanceState(state);
   }, [state]);
 
+  useEffect(() => {
+    const html = document.documentElement;
+    const body = document.body;
+
+    if (!historyOpen) {
+      html.classList.remove("sheet-open");
+      body.classList.remove("sheet-open");
+      return;
+    }
+
+    html.classList.add("sheet-open");
+    body.classList.add("sheet-open");
+
+    return () => {
+      html.classList.remove("sheet-open");
+      body.classList.remove("sheet-open");
+    };
+  }, [historyOpen]);
+
   const parsedAmount = useMemo(() => {
     const amount = Number.parseInt(input || "0", 10);
     return Number.isFinite(amount) ? amount : 0;

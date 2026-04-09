@@ -33,6 +33,12 @@ body {
   min-height: 100svh;
 }
 
+html.sheet-open,
+body.sheet-open {
+  overflow: hidden;
+  overscroll-behavior: none;
+}
+
 button {
   font: inherit;
 }
@@ -350,6 +356,7 @@ button {
   display: grid;
   gap: 10px;
   overflow: auto;
+  max-height: calc(min(70svh, 42rem) - 8.5rem);
   padding-bottom: 2px;
   overscroll-behavior: contain;
   -webkit-overflow-scrolling: touch;
@@ -501,6 +508,10 @@ button {
     max-height: min(76svh, 38rem);
     gap: 10px;
     padding-inline: 12px;
+  }
+
+  .history-list {
+    max-height: calc(min(76svh, 38rem) - 8rem);
   }
 
   .history-item,
