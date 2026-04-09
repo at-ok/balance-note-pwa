@@ -2,3 +2,6 @@
 web/node_modules
 web/dist
 web/.swift-module-cache
+web/*.tsbuildinfo
+web/vite.config.js
+web/vite.config.d.ts
