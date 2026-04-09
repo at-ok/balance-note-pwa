@@ -41,9 +41,9 @@ button {
   position: relative;
   min-height: 100svh;
   padding:
-    calc(env(safe-area-inset-top, 0px) + 18px)
-    16px
-    calc(env(safe-area-inset-bottom, 0px) + 24px);
+    calc(env(safe-area-inset-top, 0px) + 12px)
+    14px
+    calc(env(safe-area-inset-bottom, 0px) + 14px);
   overflow: hidden;
 }
 
@@ -75,7 +75,7 @@ button {
   max-width: 31rem;
   margin: 0 auto;
   display: grid;
-  gap: 14px;
+  gap: 10px;
 }
 
 .topbar {
@@ -83,12 +83,12 @@ button {
   justify-content: space-between;
   align-items: flex-start;
   gap: 16px;
-  padding: 6px 6px 0;
+  padding: 2px 4px 0;
 }
 
 .topbar h1 {
   margin: 2px 0 0;
-  font-size: clamp(1.65rem, 4vw, 2rem);
+  font-size: clamp(1.4rem, 4vw, 1.85rem);
   letter-spacing: -0.04em;
 }
 
@@ -102,7 +102,7 @@ button {
 .eyebrow,
 .section-label {
   margin: 0;
-  font-size: 0.82rem;
+  font-size: 0.78rem;
   font-weight: 600;
 }
 
@@ -117,7 +117,7 @@ button {
 }
 
 .ghost-button {
-  padding: 10px 14px;
+  padding: 8px 12px;
   border-radius: 999px;
 }
 
@@ -137,52 +137,52 @@ button {
 .install-card,
 .balance-card,
 .entry-card {
-  border-radius: 28px;
-  padding: 18px;
+  border-radius: 24px;
+  padding: 14px;
 }
 
 .install-card {
   display: grid;
-  gap: 6px;
+  gap: 4px;
 }
 
 .install-title {
   margin: 0;
-  font-size: 0.98rem;
+  font-size: 0.92rem;
   font-weight: 700;
   letter-spacing: -0.02em;
 }
 
 .install-copy {
   margin: 4px 0 0;
-  line-height: 1.45;
-  font-size: 0.9rem;
+  line-height: 1.35;
+  font-size: 0.84rem;
 }
 
 .balance-value,
 .entry-value {
-  margin: 10px 0 0;
+  margin: 8px 0 0;
   letter-spacing: -0.05em;
   font-weight: 750;
   font-variant-numeric: tabular-nums;
 }
 
 .balance-value {
-  font-size: clamp(2.3rem, 8vw, 3.35rem);
+  font-size: clamp(2rem, 8vw, 2.9rem);
 }
 
 .entry-value {
-  font-size: clamp(2rem, 7vw, 2.9rem);
+  font-size: clamp(1.7rem, 6.6vw, 2.4rem);
 }
 
 .balance-meta {
-  margin: 10px 0 0;
-  font-size: 0.9rem;
+  margin: 8px 0 0;
+  font-size: 0.82rem;
 }
 
 .entry-header {
   display: grid;
-  gap: 16px;
+  gap: 10px;
 }
 
 .micro-actions {
@@ -193,8 +193,9 @@ button {
 }
 
 .subtle-button {
-  padding: 9px 13px;
+  padding: 7px 11px;
   border-radius: 999px;
+  font-size: 0.86rem;
 }
 
 .subtle-button:disabled,
@@ -203,12 +204,12 @@ button {
 }
 
 .primary-action {
-  margin-top: 16px;
+  margin-top: 12px;
   width: 100%;
   border: 0;
-  border-radius: 20px;
-  padding: 16px 18px;
-  font-size: 1rem;
+  border-radius: 18px;
+  padding: 13px 16px;
+  font-size: 0.96rem;
   font-weight: 700;
   color: #ffffff;
   background:
@@ -221,19 +222,19 @@ button {
 .keypad {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 12px;
-  border-radius: 32px;
-  padding: 14px;
+  gap: 10px;
+  border-radius: 28px;
+  padding: 12px;
 }
 
 .key {
-  min-height: 78px;
+  min-height: clamp(58px, 8.8svh, 74px);
   border: 0;
-  border-radius: 22px;
+  border-radius: 18px;
   background:
     linear-gradient(180deg, rgba(17, 24, 39, 0.92), rgba(30, 41, 59, 0.96));
   color: #ffffff;
-  font-size: 1.8rem;
+  font-size: clamp(1.45rem, 4.9vw, 1.7rem);
   font-weight: 650;
   letter-spacing: -0.04em;
   box-shadow:
@@ -256,12 +257,79 @@ button {
 
 @media (min-width: 720px) {
   .device-frame {
-    gap: 18px;
+    gap: 14px;
   }
 
   .install-card,
   .balance-card,
   .entry-card {
-    padding: 22px;
+    padding: 18px;
+  }
+}
+
+@media (max-height: 860px) {
+  .app-shell {
+    padding:
+      calc(env(safe-area-inset-top, 0px) + 10px)
+      12px
+      calc(env(safe-area-inset-bottom, 0px) + 10px);
+  }
+
+  .device-frame {
+    gap: 8px;
+  }
+
+  .install-card,
+  .balance-card,
+  .entry-card {
+    padding: 12px;
+    border-radius: 22px;
+  }
+
+  .install-copy {
+    font-size: 0.8rem;
+  }
+
+  .balance-value {
+    font-size: clamp(1.8rem, 7.2vw, 2.45rem);
+  }
+
+  .entry-value {
+    font-size: clamp(1.5rem, 6vw, 2rem);
+  }
+
+  .keypad {
+    padding: 10px;
+    gap: 8px;
+  }
+
+  .key {
+    min-height: clamp(52px, 7.6svh, 64px);
+    border-radius: 16px;
+  }
+}
+
+@media (max-height: 760px) {
+  .eyebrow,
+  .balance-meta,
+  .install-copy {
+    display: none;
+  }
+
+  .topbar h1 {
+    font-size: 1.3rem;
+  }
+
+  .install-card {
+    padding: 10px 12px;
+  }
+
+  .install-title {
+    font-size: 0.84rem;
+  }
+
+  .primary-action {
+    margin-top: 10px;
+    padding: 12px 14px;
   }
 }
