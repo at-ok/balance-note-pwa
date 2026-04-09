@@ -318,14 +318,6 @@ button {
   touch-action: pan-y;
 }
 
-.history-sheet-grabber {
-  width: 44px;
-  height: 5px;
-  margin: 0 auto;
-  border-radius: 999px;
-  background: rgba(102, 112, 133, 0.35);
-}
-
 .history-sheet-header,
 .history-sheet-toolbar,
 .history-item-row {

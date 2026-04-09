@@ -114,10 +114,15 @@ function App() {
           ? current.balance + current.lastAction.amount
           : current.balance - current.lastAction.amount;
 
+      const nextHistory =
+        current.history[0]?.id === current.lastAction.id
+          ? current.history.slice(1)
+          : current.history;
+
       return {
         balance: nextBalance,
         lastAction: null,
-        history: current.history
+        history: nextHistory
       };
     });
   };
@@ -243,8 +248,6 @@ function App() {
         aria-label="操作履歴"
         className={`history-sheet${historyOpen ? " is-open" : ""}`}
       >
-        <div className="history-sheet-grabber" />
-
         <div className="history-sheet-header">
           <div>
             <p className="section-label">操作履歴</p>
