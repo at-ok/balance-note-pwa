@@ -41,9 +41,9 @@ button {
   position: relative;
   min-height: 100svh;
   padding:
-    calc(env(safe-area-inset-top, 0px) + 12px)
+    calc(env(safe-area-inset-top, 0px) + 18px)
     14px
-    calc(env(safe-area-inset-bottom, 0px) + 14px);
+    calc(env(safe-area-inset-bottom, 0px) + 18px);
   overflow: hidden;
 }
 
@@ -74,7 +74,11 @@ button {
   z-index: 1;
   max-width: 31rem;
   margin: 0 auto;
+  min-height: calc(
+    100svh - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px) - 36px
+  );
   display: grid;
+  align-content: stretch;
   gap: 10px;
 }
 
@@ -222,6 +226,7 @@ button {
 .keypad {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
+  align-self: end;
   gap: 10px;
   border-radius: 28px;
   padding: 12px;
@@ -270,12 +275,15 @@ button {
 @media (max-height: 860px) {
   .app-shell {
     padding:
-      calc(env(safe-area-inset-top, 0px) + 10px)
+      calc(env(safe-area-inset-top, 0px) + 14px)
       12px
-      calc(env(safe-area-inset-bottom, 0px) + 10px);
+      calc(env(safe-area-inset-bottom, 0px) + 14px);
   }
 
   .device-frame {
+    min-height: calc(
+      100svh - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px) - 28px
+    );
     gap: 8px;
   }
 
@@ -331,5 +339,11 @@ button {
   .primary-action {
     margin-top: 10px;
     padding: 12px 14px;
+  }
+
+  .device-frame {
+    min-height: calc(
+      100svh - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px) - 24px
+    );
   }
 }
